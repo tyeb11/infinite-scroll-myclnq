@@ -9,9 +9,10 @@ import {
   Spinner,
   Grid,
   Center,
+  Text,
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
-import axios from 'axios'
+import axios from "axios";
 import useLazyLoad from "./useLazyLoad";
 import theme from "./lib/theme";
 const Card = lazy(() => import("./CardContainer"));
@@ -30,8 +31,6 @@ function App() {
           .then((data) => {
             resolve(data);
           });
-      
-    
       });
     } else {
       return new Promise((resolve, reject) => {
@@ -109,29 +108,35 @@ function App() {
             </>
           ) : (
             <Grid templateColumns="repeat(3,1fr)" gap={6}>
-              {imgFilterData.map(({ name, poster_image, index }) => {
-                return (
-                  <Suspense
-                    fallback={
-                      <Center mt={10}>
-                        <Spinner
-                          thickness="4px"
-                          speed="0.65s"
-                          emptyColor="gray.200"
-                          color="blue.500"
-                          size="xl"
-                        />
-                      </Center>
-                    }
-                  >
-                    <Card
-                      name={name}
-                      poster_image={poster_image}
-                      index={index}
-                    />
-                  </Suspense>
-                );
-              })}
+              {!imgFilterData.length ? (
+                <Center>
+                  <Text>No Search Found</Text>
+                </Center>
+              ) : (
+                imgFilterData.map(({ name, poster_image, index }) => {
+                  return (
+                    <Suspense
+                      fallback={
+                        <Center mt={10}>
+                          <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="gray.200"
+                            color="blue.500"
+                            size="xl"
+                          />
+                        </Center>
+                      }
+                    >
+                      <Card
+                        name={name}
+                        poster_image={poster_image}
+                        index={index}
+                      />
+                    </Suspense>
+                  );
+                })
+              )}
             </Grid>
           )}
         </Container>
