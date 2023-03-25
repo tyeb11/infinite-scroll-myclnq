@@ -2,6 +2,8 @@
 
 implementing infinite scroll using react lazy hook and a custom react build hook.
 
+![](https://github.com/tyeb11/infinite-scroll-myclnq/blob/master/res/lazy%2Binfinite-scroll-myclnq.gif)
+
 ## Stack
 
 - [React](https://react.dev/) - A simple lib that lets you build user interface
