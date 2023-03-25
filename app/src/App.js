@@ -12,37 +12,37 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
-import axios from "axios";
 import useLazyLoad from "./useLazyLoad";
 import theme from "./lib/theme";
-const Card = lazy(() => import("./CardContainer"));
-const PAGE_LENGTH = 7;
+const Card = lazy(() => import("./CardContainer")); // lazy loading card component
+const PAGE_LENGTH = 7; // max request
 function App() {
   const [imgFilterData, setImgFilterData] = useState([]);
   const [loader, setLoader] = useState(true);
   const [search, setSearch] = useState("");
-  const triggerRef = useRef(null);
+  const triggerRef = useRef(null); // div that gets trigger when user navigates to bottom
   const onGrabData = (currentPage) => {
     if (currentPage < PAGE_LENGTH) {
+      // condition to check if user has reached its max request
       return new Promise((resolve) => {
-        fetch(`http://localhost:3000/content?_page=${currentPage}&_limit=10
-`)
+        fetch(`http://localhost:3000/content?_page=${currentPage}&_limit=10 
+`) // fetching data from server
           .then((res) => res.json())
           .then((data) => {
-            resolve(data);
+            resolve(data); // ading data
           });
       });
     } else {
       return new Promise((resolve, reject) => {
-        setLoader(false);
+        setLoader(false); // after reaching max request do not show loader
         reject();
       });
     }
   };
-  const { data, loading } = useLazyLoad({ triggerRef, onGrabData });
+  const { data, loading } = useLazyLoad({ triggerRef, onGrabData }); // custom hook that takes triggering div and fetching data function
 
   const filterImgData = (value) => {
-    console.log(value);
+    // filter data from requested data
     setSearch(value);
     const newData = data.filter(({ name }) =>
       name.toUpperCase().includes(value.toUpperCase())
