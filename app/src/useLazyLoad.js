@@ -2,7 +2,7 @@ import { useEffect, useReducer, useCallback } from "react";
 import debounce from "lodash/debounce";
 
 const INTERSECTION_THRESHOLD = 5;
-const LOAD_DELAY_MS = 300;
+const LOAD_DELAY_MS = 300; // request time
 const INITIAL_STATE = {
   loading: false,
   currentPage: 1,
@@ -42,10 +42,9 @@ const useLazyLoad = ({ triggerRef, onGrabData, options }) => {
       entry.isIntersecting &&
       intersectionRect.bottom - boundingRect.bottom <= INTERSECTION_THRESHOLD
     ) {
-      dispatch({ type: "set", payload: { loading: true } });
-      const data = await onGrabData(state.currentPage);
-      console.log(data);
-      dispatch({ type: "onGrabData", payload: { data } });
+      dispatch({ type: "set", payload: { loading: true } }); // started request
+      const data = await onGrabData(state.currentPage); // requested to fetch data
+      dispatch({ type: "onGrabData", payload: { data } }); // set fetch data
     }
   };
   const handleEntry = debounce(_handleEntry, LOAD_DELAY_MS);
@@ -59,13 +58,13 @@ const useLazyLoad = ({ triggerRef, onGrabData, options }) => {
 
   useEffect(() => {
     if (triggerRef.current) {
-      const container = triggerRef.current;
+      const container = triggerRef.current; // trigger div
       const observer = new IntersectionObserver(onIntersect, options);
 
       observer.observe(container);
 
       return () => {
-        observer.disconnect();
+        observer.disconnect(); //clear observer
       };
     }
   }, [triggerRef, onIntersect, options]);
